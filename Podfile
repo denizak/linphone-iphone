@@ -65,7 +65,12 @@ target 'CallUITests' do
 end
 
 post_install do |installer|
-        system("sed 's/fileprivate let tableView =/public let tableView =/g' ./Pods/DropDown/DropDown/src/DropDown.swift > tmp.swift && mv -f tmp.swift ./Pods/DropDown/DropDown/src/DropDown.swift")
+  system("sed 's/fileprivate let tableView =/public let tableView =/g' ./Pods/DropDown/DropDown/src/DropDown.swift > tmp.swift && mv -f tmp.swift ./Pods/DropDown/DropDown/src/DropDown.swift")
+
+  installer.pods_project.build_configurations.each do |config|
+    config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+  end
+
 	# Get the version of linphone-sdk
 	installer.pod_targets.each do |target|
 		if target.pod_name == 'linphone-sdk'

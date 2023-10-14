@@ -538,13 +538,17 @@ class ChatConversationTableViewSwift: UIViewController, UICollectionViewDataSour
 						ChatConversationViewModel.sharedModel.removeTmpFile(filePath: plainFile)
 						plainFile = ""
 						
-					}else {
-						image = UIImage(contentsOfFile: chatMessage.contents.first!.filePath)!
+                    } else if let filePath = chatMessage.contents.first?.filePath {
+						image = UIImage(contentsOfFile: filePath)!
 					}
 				}
 				
 				viewer.imageViewer = image
-				viewer.imageNameViewer = chatMessage.contents.first!.name.isEmpty ? "" : chatMessage.contents.first!.name
+                if let firstName = chatMessage.contents.first?.name {
+                    viewer.imageNameViewer = firstName.isEmpty ? "-" : firstName
+                } else {
+                    viewer.imageNameViewer = "-"
+                }
 				viewer.imagePathViewer = chatMessage.contents.first!.exportPlainFile()
 				viewer.contentType = chatMessage.contents.first!.type
 				PhoneMainView.instance().changeCurrentView(viewer.compositeViewDescription())
@@ -595,12 +599,16 @@ class ChatConversationTableViewSwift: UIViewController, UICollectionViewDataSour
 								if chatMessage != nil {
 									
 									viewer.textViewer = text
-									viewer.textNameViewer = chatMessage!.contents[index].name.isEmpty ? "" : chatMessage!.contents[index].name
+                                    if let name = chatMessage?.contents[index].name {
+                                        viewer.textNameViewer = name.isEmpty ? "-" : name
+                                    }
 									PhoneMainView.instance().changeCurrentView(viewer.compositeViewDescription())
 								}
 
 							} catch {
-								if text == "" && (chatMessage!.contents[index].type == "image" || chatMessage!.contents[index].type == "video" || chatMessage!.contents[index].name.lowercased().components(separatedBy: ".").last == "pdf"){
+                                let name = chatMessage?.contents[index].name ?? ""
+								if text == "" && (chatMessage!.contents[index].type == "image" || chatMessage!.contents[index].type == "video"
+                                                  || name.lowercased().components(separatedBy: ".").last == "pdf") {
 									let viewer: MediaViewer = VIEW(MediaViewer.compositeViewDescription())
 									
 									var image = UIImage()
@@ -614,13 +622,15 @@ class ChatConversationTableViewSwift: UIViewController, UICollectionViewDataSour
 												ChatConversationViewModel.sharedModel.removeTmpFile(filePath: plainFile)
 												plainFile = ""
 												
-											}else {
-												image = UIImage(contentsOfFile: chatMessage!.contents[index].filePath)!
+                                            } else if let filePath = chatMessage?.contents[index].filePath {
+												image = UIImage(contentsOfFile: filePath)!
 											}
 										}
 										
 										viewer.imageViewer = image
-										viewer.imageNameViewer = chatMessage!.contents[index].name.isEmpty ? "" : chatMessage!.contents[index].name
+                                        if let name = chatMessage?.contents[index].name {
+                                            viewer.imageNameViewer = name.isEmpty ? "-" : name
+                                        }
 										viewer.imagePathViewer = chatMessage!.contents[index].exportPlainFile()
 										viewer.contentType = chatMessage!.contents[index].type
 										PhoneMainView.instance().changeCurrentView(viewer.compositeViewDescription())

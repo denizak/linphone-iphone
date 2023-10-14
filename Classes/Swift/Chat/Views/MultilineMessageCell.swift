@@ -571,7 +571,7 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 		recordingWaveView.addSubview(recordingDurationTextView)
 		recordingDurationTextView.alignParentRight(withMargin: 10).matchParentHeight().done()
 		
-		let img = message.isOutgoing ? UIImage.withColor(UIColor("A")) : UIImage.withColor(UIColor("D"))
+        let img = message.isOutgoing ? UIImage.withColor(UIColor(hex: "A")) : UIImage.withColor(UIColor(hex: "D"))
 		recordingWaveView.progressImage = img
 		
 		var filePathRecording = message.contents.first?.filePath
@@ -885,7 +885,7 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 				replyView.isHidden = false
 				
 				if(event.chatMessage!.replyMessage != nil){
-					replyColorContent.backgroundColor = event.chatMessage!.replyMessage!.isOutgoing ? UIColor("A") : UIColor("D")
+                    replyColorContent.backgroundColor = event.chatMessage!.replyMessage!.isOutgoing ? UIColor(hex: "A") : UIColor(hex: "D")
 					
 					let isIcal = ICSBubbleView.isConferenceInvitationMessage(cmessage: (event.chatMessage!.replyMessage?.getCobject)!)
 					let content : String? = (isIcal ? ICSBubbleView.getSubjectFromContent(cmessage: (event.chatMessage!.replyMessage?.getCobject)!) : ChatMessage.getSwiftObject(cObject: (event.chatMessage!.replyMessage?.getCobject)!).utf8Text)
@@ -1124,10 +1124,10 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 						}
 						
 						label.font = label.font.withSize(17)
-						
-						if (content.utf8Text.trimmingCharacters(in: .whitespacesAndNewlines).unicodeScalars.first?.properties.isEmojiPresentation == true){
+                        let contentText = content.utf8Text ?? ""
+                        if (contentText.trimmingCharacters(in: .whitespacesAndNewlines).unicodeScalars.first?.properties.isEmojiPresentation == true){
 							var onlyEmojis = true
-							content.utf8Text.trimmingCharacters(in: .whitespacesAndNewlines).unicodeScalars.forEach { emoji in
+                            contentText.trimmingCharacters(in: .whitespacesAndNewlines).unicodeScalars.forEach { emoji in
 								if !emoji.properties.isEmojiPresentation && !emoji.properties.isWhitespace{
 									onlyEmojis = false
 								}
@@ -1137,8 +1137,8 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 							}
 						}
 						
-						checkIfIsLinkOrPhoneNumber(content: content.utf8Text)
-						
+						checkIfIsLinkOrPhoneNumber(content: contentText)
+
 						NSLayoutConstraint.deactivate(labelHiddenConstraints)
 						label.isHidden = false
 					}else if content.type == "image"{
@@ -1397,8 +1397,8 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 				eventMessageLineView.backgroundColor = .red
 				eventMessageLabel.textColor = .red
 			} else {
-				eventMessageLineView.backgroundColor = UIColor("D").withAlphaComponent(0.6)
-				eventMessageLabel.textColor = UIColor("D").withAlphaComponent(0.6)
+                eventMessageLineView.backgroundColor = UIColor(hex: "D").withAlphaComponent(0.6)
+                eventMessageLabel.textColor = UIColor(hex: "D").withAlphaComponent(0.6)
 			}
 		}
 		
@@ -1722,9 +1722,10 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 						downloadView.size(w: 138, h: 138).done()
 						viewCell.addSubview(downloadView)
 
-						downloadView.downloadNameLabel.text = chatMessage?.contents[indexPathWithoutNilWithRecording].name.replacingOccurrences(of: ((chatMessage?.contents[indexPathWithoutNilWithRecording].name.dropFirst(6).dropLast(8))!), with: "...")
-						downloadView.setFileType(fileName: (chatMessage?.contents[indexPathWithoutNilWithRecording].name)!)
-						
+                        let chatMessageName = chatMessage?.contents[indexPathWithoutNilWithRecording].name ?? "-"
+                        downloadView.downloadNameLabel.text = chatMessageName.replacingOccurrences(of: ((chatMessageName.dropFirst(6).dropLast(8))), with: "...")
+						downloadView.setFileType(fileName: chatMessageName)
+
 						let underlineAttribute = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.thick.rawValue]
 						let underlineAttributedString = NSAttributedString(string: "\(VoipTexts.bubble_chat_download_file) (\(String(format: "%.1f", Float(((chatMessage?.contents[indexPathWithoutNilWithRecording].fileSize)!)) / 1000000)) Mo)", attributes: underlineAttribute)
 						downloadView.downloadButtonLabel.attributedText = underlineAttributedString
@@ -1803,8 +1804,8 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 		var filePath = ""
 		if VFSUtil.vfsEnabled(groupName: kLinphoneMsgNotificationAppGroupId) {
 			filePath = content!.exportPlainFile()
-		}else {
-			filePath = content!.filePath
+        } else if let contentFilePath = content?.filePath {
+			filePath = contentFilePath
 		}
 		let type = content?.type
 		let name = content?.name
@@ -1871,19 +1872,19 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 		var participant = ""
 		switch (event.type.rawValue) {
 		case Int(LinphoneEventLogTypeConferenceSubjectChanged.rawValue):
-			subject = event.subject
+            subject = event.subject ?? "-"
 			return VoipTexts.bubble_chat_event_message_new_subject + subject
 		case Int(LinphoneEventLogTypeConferenceParticipantAdded.rawValue):
-			participant = event.participantAddress!.displayName != "" ? event.participantAddress!.displayName : event.participantAddress!.username
+            participant = (event.participantAddress!.displayName != "" ? event.participantAddress!.displayName : event.participantAddress!.username) ?? "-"
 			return participant + VoipTexts.bubble_chat_event_message_has_joined
 		case Int(LinphoneEventLogTypeConferenceParticipantRemoved.rawValue):
-			participant = event.participantAddress!.displayName != "" ? event.participantAddress!.displayName : event.participantAddress!.username
+            participant = (event.participantAddress!.displayName != "" ? event.participantAddress!.displayName : event.participantAddress!.username) ?? "-"
 			return participant + VoipTexts.bubble_chat_event_message_has_left
 		case Int(LinphoneEventLogTypeConferenceParticipantSetAdmin.rawValue):
-			participant = event.participantAddress!.displayName != "" ? event.participantAddress!.displayName : event.participantAddress!.username
+            participant = (event.participantAddress!.displayName != "" ? event.participantAddress!.displayName : event.participantAddress!.username) ?? "-"
 			return participant + VoipTexts.bubble_chat_event_message_now_admin
 		case Int(LinphoneEventLogTypeConferenceParticipantUnsetAdmin.rawValue):
-			participant = event.participantAddress!.displayName != "" ? event.participantAddress!.displayName : event.participantAddress!.username
+            participant = (event.participantAddress!.displayName != "" ? event.participantAddress!.displayName : event.participantAddress!.username) ?? "-"
 			return participant + VoipTexts.bubble_chat_event_message_no_longer_admin
 		case Int(LinphoneEventLogTypeConferenceTerminated.rawValue):
 			return VoipTexts.bubble_chat_event_message_left_group
@@ -1891,10 +1892,10 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 			return VoipTexts.bubble_chat_event_message_joined_group
 		case Int(LinphoneEventLogTypeConferenceSecurityEvent.rawValue):
 			let type = event.securityEventType
-			let participant = event.securityEventFaultyDeviceAddress!.displayName != "" ? event.securityEventFaultyDeviceAddress!.displayName : event.securityEventFaultyDeviceAddress!.username
+			let participant = (event.securityEventFaultyDeviceAddress!.displayName != "" ? event.securityEventFaultyDeviceAddress!.displayName : event.securityEventFaultyDeviceAddress!.username) ?? "-"
 			switch (type.rawValue) {
 			case Int(LinphoneSecurityEventTypeSecurityLevelDowngraded.rawValue):
-				if (participant.isEmpty){
+                if (participant.isEmpty) {
 					return VoipTexts.bubble_chat_event_message_security_level_decreased
 				}else{
 					return VoipTexts.bubble_chat_event_message_security_level_decreased_because + participant

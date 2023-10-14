@@ -155,7 +155,7 @@ class CallData  {
 	}
 	
 	func getConferenceAddress(call: Call) -> Address? {
-		let remoteContact = call.remoteContact
+		let remoteContact = call.remoteContact ?? ""
 		return call.dir == .Incoming ? (remoteContact != nil ? Core.get().interpretUrl(url: remoteContact, applyInternationalPrefix: CallManager.instance().applyInternationalPrefix()) : nil) : call.remoteAddress
 	}
 	
