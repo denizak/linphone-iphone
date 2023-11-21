@@ -84,7 +84,7 @@ import linphonesw
 			return foundContact
 		}
 		
-		if let foundContact = getContactFromPhoneNb(phoneNb: searchResult.phoneNumber)  {
+        if let foundContact = getContactFromPhoneNb(phoneNb: searchResult.phoneNumber ?? "")  {
 			return foundContact
 		}
 		

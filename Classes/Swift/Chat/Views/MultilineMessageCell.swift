@@ -1027,7 +1027,7 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 						if VFSUtil.vfsEnabled(groupName: kLinphoneMsgNotificationAppGroupId) {
 							filePath = content.exportPlainFile()
 						}else {
-							filePath = content.filePath
+                            filePath = content.filePath ?? ""
 						}
 						let name = content.name
 						if filePath == "" {
@@ -1056,7 +1056,7 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 									ChatConversationViewModel.sharedModel.removeTmpFile(filePath: plainFile)
 									plainFile = ""
 								}else{
-									if let imageMessage = UIImage(named: content.filePath){
+                                    if let path = content.filePath, let imageMessage = UIImage(named: path) {
 										self.imageViewBubble.image = self.resizeImage(image: imageMessage, targetSize: CGSize(width: UIScreen.main.bounds.size.width*3/4, height: 300.0))
 									}
 								}
@@ -1085,7 +1085,7 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 									ChatConversationViewModel.sharedModel.removeTmpFile(filePath: plainFile)
 									plainFile = ""
 								}else{
-									if let imageMessage = createThumbnailOfVideoFromFileURL(videoURL: content.filePath){
+                                    if let path = content.filePath, let imageMessage = createThumbnailOfVideoFromFileURL(videoURL: path) {
 										imageVideoViewBubble.image = resizeImage(image: imageMessage, targetSize: CGSize(width: UIScreen.main.bounds.size.width*3/4, height: 300.0))
 									}
 								}
@@ -1164,7 +1164,7 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 								ChatConversationViewModel.sharedModel.removeTmpFile(filePath: plainFile)
 								plainFile = ""
 							}else{
-								if let imageMessage = UIImage(named: content.filePath){
+                                if let path = content.filePath, let imageMessage = UIImage(named: path){
 									self.imageViewBubble.image = self.resizeImage(image: imageMessage, targetSize: CGSize(width: UIScreen.main.bounds.size.width*3/4, height: 300.0))
 								}
 							}
@@ -1198,7 +1198,7 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 								ChatConversationViewModel.sharedModel.removeTmpFile(filePath: plainFile)
 								plainFile = ""
 							}else{
-								if let imageMessage = createThumbnailOfVideoFromFileURL(videoURL: content.filePath){
+                                if let path = content.filePath, let imageMessage = createThumbnailOfVideoFromFileURL(videoURL: path) {
 									imageVideoViewBubble.image = resizeImage(image: imageMessage, targetSize: CGSize(width: UIScreen.main.bounds.size.width*3/4, height: 300.0))
 								}
 							}
@@ -1223,7 +1223,7 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 							if VFSUtil.vfsEnabled(groupName: kLinphoneMsgNotificationAppGroupId) {
 								filePath = content.exportPlainFile()
 							}else {
-								filePath = content.filePath
+								filePath = content.filePath ?? ""
 							}
 							let name = content.name
 							if filePath == "" {
@@ -1252,7 +1252,7 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 										ChatConversationViewModel.sharedModel.removeTmpFile(filePath: plainFile)
 										plainFile = ""
 									}else{
-										if let imageMessage = UIImage(named: content.filePath){
+                                        if let path = content.filePath, let imageMessage = UIImage(named: path) {
 											self.imageViewBubble.image = self.resizeImage(image: imageMessage, targetSize: CGSize(width: UIScreen.main.bounds.size.width*3/4, height: 300.0))
 										}
 									}
@@ -1281,7 +1281,7 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 										ChatConversationViewModel.sharedModel.removeTmpFile(filePath: plainFile)
 										plainFile = ""
 									}else{
-										if let imageMessage = createThumbnailOfVideoFromFileURL(videoURL: content.filePath){
+                                        if let path = content.filePath, let imageMessage = createThumbnailOfVideoFromFileURL(videoURL: path) {
 											imageVideoViewBubble.image = resizeImage(image: imageMessage, targetSize: CGSize(width: UIScreen.main.bounds.size.width*3/4, height: 300.0))
 										}
 									}
@@ -1315,7 +1315,7 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 								imageViewBubble.isHidden = true
 							} else {
 								var filePathString = VFSUtil.vfsEnabled(groupName: kLinphoneMsgNotificationAppGroupId) ? content.exportPlainFile() : content.filePath
-								if let urlEncoded = filePathString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed){
+                                if let urlEncoded = filePathString?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed){
 									if !urlEncoded.isEmpty {
 										if let urlFile = URL(string: "file://" + urlEncoded){
 											do {
@@ -1683,7 +1683,7 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 			if(replyContentCollection[indexPath.row].type == "image" || replyContentCollection[indexPath.row].type == "video"){
 				myImageView = UIImageView(image: imageCell)
 			}else{
-				let fileNameText = replyContentCollection[indexPath.row].name
+                let fileNameText = replyContentCollection[indexPath.row].name ?? ""
 				let fileName = SwiftUtil.textToImage(drawText:fileNameText, inImage:imageCell, forReplyBubble:true)
 				myImageView = UIImageView(image: fileName)
 			}
@@ -1988,7 +1988,7 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 									ChatConversationViewModel.sharedModel.removeTmpFile(filePath: plainFile)
 									plainFile = ""
 								}else{
-									if let imageMessage = createThumbnailOfVideoFromFileURL(videoURL: content.filePath){
+                                    if let imageMessage = createThumbnailOfVideoFromFileURL(videoURL: content.filePath ?? "") {
 										imageVideoViewBubble.image = resizeImage(image: imageMessage, targetSize: CGSize(width: UIScreen.main.bounds.size.width*3/4, height: 300.0))
 										if (imageVideoViewBubble.image != nil && imagesGridCollectionView.count <= 1){
 											ChatConversationTableViewModel.sharedModel.reloadCollectionViewCell()
@@ -2008,7 +2008,7 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 									ChatConversationViewModel.sharedModel.removeTmpFile(filePath: plainFile)
 									plainFile = ""
 								}else{
-									if let imageMessage = UIImage(named: content.filePath){
+                                    if let path = content.filePath, let imageMessage = UIImage(named: path) {
 										imageViewBubble.image = resizeImage(image: imageMessage, targetSize: CGSize(width: UIScreen.main.bounds.size.width*3/4, height: 300.0))
 										if (imageViewBubble.image != nil && imagesGridCollectionView.count <= 1 && !(linphone_core_get_max_size_for_auto_download_incoming_files(LinphoneManager.getLc()) > -1)){
 											ChatConversationTableViewModel.sharedModel.reloadCollectionViewCell()
@@ -2077,7 +2077,7 @@ class MultilineMessageCell: SwipeCollectionViewCell, UICollectionViewDataSource,
 					if VFSUtil.vfsEnabled(groupName: kLinphoneMsgNotificationAppGroupId) {
 						filePath = content.exportPlainFile()
 					}else {
-						filePath = content.filePath
+						filePath = content.filePath ?? ""
 					}
 					
 					let extensionFile = filePath.lowercased().components(separatedBy: ".").last

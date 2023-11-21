@@ -143,7 +143,7 @@ class ConferenceSchedulingViewModel  {
 	func isEndToEndEncryptedChatAvailable() -> Bool {
 		let core = Core.get()
 		return core.limeX3DhEnabled &&
-		((core.limeX3DhServerUrl != nil && core.limeX3DhServerUrl.count > 0) || core.defaultAccount?.params?.limeServerUrl != nil) &&
+        ((core.limeX3DhServerUrl != nil && (core.limeX3DhServerUrl?.count ?? 0) > 0) || core.defaultAccount?.params?.limeServerUrl != nil) &&
 					 core.defaultAccount?.params?.conferenceFactoryUri != nil
 	 }
 	

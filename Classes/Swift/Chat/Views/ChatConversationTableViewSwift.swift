@@ -589,7 +589,7 @@ class ChatConversationTableViewSwift: UIViewController, UICollectionViewDataSour
 				
 				var text = ""
 				var filePathString = VFSUtil.vfsEnabled(groupName: kLinphoneMsgNotificationAppGroupId) ? chatMessage!.contents[index].exportPlainFile() : chatMessage!.contents[index].filePath
-				if let urlEncoded = filePathString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed){
+				if let path = filePathString, let urlEncoded = path.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed){
 					if !urlEncoded.isEmpty {
 						if let urlFile = URL(string: "file://" + urlEncoded){
 							do {
@@ -654,7 +654,7 @@ class ChatConversationTableViewSwift: UIViewController, UICollectionViewDataSour
 											let previewController = QLPreviewController()
 											self.previewItems = []
 											
-											self.previewItems.append(self.getPreviewItem(filePath: filePathString))
+											self.previewItems.append(self.getPreviewItem(filePath: filePathString ?? ""))
 											
 											
 											self.afterPreviewIndex = indexMessage
@@ -693,7 +693,7 @@ class ChatConversationTableViewSwift: UIViewController, UICollectionViewDataSour
 							plainFile = ""
 							
 						}else {
-							self.previewItems.append(self.getPreviewItem(filePath: (content.filePath)))
+                            self.previewItems.append(self.getPreviewItem(filePath: (content.filePath ?? "")))
 						}
 					}
 				})
