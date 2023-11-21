@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleDisplayName</key>
-	<string>Linphone</string>
+	<string>phone</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIcons~ipad</key>
@@ -107,7 +107,7 @@
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Stream audio and video through the local network</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Linphone will not use, store or communicate your location. The authorization allows us to detect Wifi connection changes</string>
+	<string>phone will not use, store or communicate your location. The authorization allows us to detect Wifi connection changes</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Use microphone to make audio calls</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
