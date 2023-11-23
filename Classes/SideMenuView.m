@@ -20,6 +20,7 @@
 #import "SideMenuView.h"
 #import "LinphoneManager.h"
 #import "PhoneMainView.h"
+#import "linphoneapp-Swift.h"
 
 @implementation SideMenuView
 
@@ -95,6 +96,10 @@
 #pragma deploymate pop
 
 - (IBAction)onHeaderClick:(id)sender {
+    BiometricVerificator *objVerify = [BiometricVerificator new];
+    [objVerify verifyBiometricWithResult:^(BOOL verified) {
+        NSLog(@"is biometric verified %@", verified ? @"true" : @"false");
+    }];
 	[PhoneMainView.instance changeCurrentView:SettingsView.compositeViewDescription];
 	[PhoneMainView.instance.mainViewController hideSideMenu:YES];
 }
