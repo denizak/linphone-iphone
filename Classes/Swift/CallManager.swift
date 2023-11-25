@@ -638,14 +638,14 @@ import AVFoundation
 					.OutgoingEarlyMedia:
 				if (CallManager.callKitEnabled()) {
 					let uuid = CallManager.instance().providerDelegate.uuids[""]
-					if (uuid != nil) {
+					if uuid != nil, let callId = callId {
 						let callInfo = CallManager.instance().providerDelegate.callInfos[uuid!]
-						callInfo!.callId = callId!
+						callInfo!.callId = callId
 						CallManager.instance().providerDelegate.callInfos.updateValue(callInfo!, forKey: uuid!)
 						CallManager.instance().providerDelegate.uuids.removeValue(forKey: "")
-						CallManager.instance().providerDelegate.uuids.updateValue(uuid!, forKey: callId!)
+						CallManager.instance().providerDelegate.uuids.updateValue(uuid!, forKey: callId)
 						
-						Log.directLog(BCTBX_LOG_MESSAGE, text: "CallKit: outgoing call started connecting with uuid \(uuid!) and callId \(callId!)")
+						Log.directLog(BCTBX_LOG_MESSAGE, text: "CallKit: outgoing call started connecting with uuid \(uuid!) and callId \(callId)")
 						CallManager.instance().providerDelegate.reportOutgoingCallStartedConnecting(uuid: uuid!)
 					} else {
 						if CallManager.instance().isConferenceCall(call: call) {
@@ -695,8 +695,8 @@ import AVFoundation
 					}
 				}
 				
-				if (CallManager.callKitEnabled()) {
-					var uuid = CallManager.instance().providerDelegate.uuids["\(callId!)"]
+				if CallManager.callKitEnabled(), let callId = callId {
+					var uuid = CallManager.instance().providerDelegate.uuids["\(callId)"]
 					if (callId == CallManager.instance().referedToCall) {
 						// refered call ended before connecting
 						Log.directLog(BCTBX_LOG_MESSAGE, text: "Callkit: end refered to call :  \(String(describing: CallManager.instance().referedToCall))")
@@ -714,7 +714,7 @@ import AVFoundation
 							let callInfo = CallManager.instance().providerDelegate.callInfos[uuid!]
 							callInfo!.callId = CallManager.instance().referedToCall ?? ""
 							CallManager.instance().providerDelegate.callInfos.updateValue(callInfo!, forKey: uuid!)
-							CallManager.instance().providerDelegate.uuids.removeValue(forKey: callId!)
+							CallManager.instance().providerDelegate.uuids.removeValue(forKey: callId)
 							CallManager.instance().providerDelegate.uuids.updateValue(uuid!, forKey: callInfo!.callId)
 							CallManager.instance().referedToCall = nil
 							break
