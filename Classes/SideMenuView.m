@@ -96,10 +96,6 @@
 #pragma deploymate pop
 
 - (IBAction)onHeaderClick:(id)sender {
-    BiometricVerificator *objVerify = [BiometricVerificator new];
-    [objVerify verifyBiometricWithResult:^(BOOL verified) {
-        NSLog(@"is biometric verified %@", verified ? @"true" : @"false");
-    }];
 	[PhoneMainView.instance changeCurrentView:SettingsView.compositeViewDescription];
 	[PhoneMainView.instance.mainViewController hideSideMenu:YES];
 }
@@ -114,6 +110,32 @@
 
 - (IBAction)onBackgroundClicked:(id)sender {
 	[PhoneMainView.instance.mainViewController hideSideMenu:YES];
+}
+
+- (IBAction)onBiometricAuthClicked:(id)sender {
+    BiometricVerificator *objVerify = [BiometricVerificator new];
+    [objVerify verifyBiometricWithResult:^(BOOL verified) {
+        NSLog(@"is biometric verified %@", verified ? @"true" : @"false");
+        if (verified) {
+            [NSOperationQueue.mainQueue addOperationWithBlock:^{
+                LinphoneCoreSettingsStore *settingStore = [LinphoneCoreSettingsStore new];
+                [settingStore setObject:@"alpha100" forKey:@"account_mandatory_username_preference"];
+                [settingStore setObject:@"alpha100" forKey:@"primary_username_preference"];
+                [settingStore setObject:@"alpha100" forKey:@"account_userid_preference"];
+                [settingStore setObject:@"20000 - 21000" forKey:@"audio_port_preference"];
+                [settingStore setObject:@"30000 - 31000" forKey:@"video_port_preference"];
+                [settingStore setObject:@"114.4.128.100" forKey:@"account_mandatory_domain_preference"];
+                [settingStore setObject:@"pass" forKey:@"account_mandatory_password_preference"];
+                [settingStore setBool:YES forKey:@"account_is_default_preference"];
+                [settingStore setBool:YES forKey:@"account_is_enabled_preference"];
+                [settingStore setInteger:0 forKey:@"current_proxy_config_preference"];
+                [settingStore setInteger:2000 forKey:@"account_expire_preference"];
+                [settingStore synchronize];
+
+                [self.biometricAuthView setHidden:YES];
+            }];
+        }
+    }];
 }
 
 - (void)registrationUpdateEvent:(NSNotification *)notif {

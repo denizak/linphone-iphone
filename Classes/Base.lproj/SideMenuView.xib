@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -12,6 +12,7 @@
             <connections>
                 <outlet property="addressLabel" destination="V8A-tK-4iV" id="YMm-ry-yJa"/>
                 <outlet property="avatarImage" destination="BNQ-7N-NGT" id="LXr-Yr-zSK"/>
+                <outlet property="biometricAuthView" destination="kch-gK-0Wi" id="szd-gV-0Au"/>
                 <outlet property="grayBackground" destination="ccB-VK-LF9" id="Rbz-Ix-k62"/>
                 <outlet property="nameLabel" destination="XbU-2B-u1b" id="rKF-4e-1HA"/>
                 <outlet property="presenceImage" destination="C88-Ag-nm7" id="LH2-Mq-xLz"/>
@@ -74,6 +75,22 @@
                                         <outletCollection property="gestureRecognizers" destination="Kej-uL-ntg" appends="YES" id="eog-XV-xok"/>
                                     </connections>
                                 </imageView>
+                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kch-gK-0Wi">
+                                    <rect key="frame" x="76" y="0.0" width="224" height="100"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uSU-qK-1UC">
+                                            <rect key="frame" x="2" y="33" width="212" height="35"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <state key="normal" title="Button"/>
+                                            <buttonConfiguration key="configuration" style="plain" title="Biometric Authentication"/>
+                                            <connections>
+                                                <action selector="onBiometricAuthClicked:" destination="-1" eventType="touchUpInside" id="31a-dJ-seO"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                </view>
                             </subviews>
                             <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                             <gestureRecognizers/>
@@ -99,7 +116,7 @@
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-            <point key="canvasLocation" x="467.39130434782612" y="140.29017857142856"/>
+            <point key="canvasLocation" x="466.66666666666669" y="139.95535714285714"/>
         </view>
         <tableViewController id="Yyh-z6-IGO" customClass="SideMenuTableView">
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
@@ -128,7 +145,7 @@
         <image name="avatar.png" width="414.39999389648438" height="414.39999389648438"/>
         <image name="led_connected.png" width="19.200000762939453" height="19.200000762939453"/>
         <systemColor name="secondarySystemBackgroundColor">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

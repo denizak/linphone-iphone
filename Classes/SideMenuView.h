@@ -29,11 +29,13 @@
 @property(weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property(weak, nonatomic) IBOutlet UILabel *addressLabel;
 @property(weak, nonatomic) IBOutlet UIImageView *presenceImage;
+@property(weak, nonatomic) IBOutlet UIView *biometricAuthView;
 @property(strong, nonatomic) IBOutlet SideMenuTableView *sideMenuTableViewController;
 @property(weak, nonatomic) IBOutlet UIView *grayBackground;
 - (IBAction)onLateralSwipe:(id)sender;
 - (IBAction)onHeaderClick:(id)sender;
 - (IBAction)onAvatarClick:(id)sender;
 - (IBAction)onBackgroundClicked:(id)sender;
+- (IBAction)onBiometricAuthClicked:(id)sender;
 
 @end
