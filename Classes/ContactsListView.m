@@ -114,6 +114,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 	
 	[tap setDelegate:self];
 	[self.view addGestureRecognizer:tap];
+    [self changeView:ContactsLinphone];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
